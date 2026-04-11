@@ -32,10 +32,18 @@ public class AuthService {
 
     @Transactional
     public TokenResponse login(LoginRequest request) {
-        var authToken = new UsernamePasswordAuthenticationToken(request.email(), request.password());
-        Authentication authentication = authenticationManager.authenticate(authToken);
+
+        var authToken = new UsernamePasswordAuthenticationToken(
+                request.email(),
+                request.password()
+        );
+
+        Authentication authentication = authenticationManager.authenticate(
+                authToken
+        );
 
         UserAuthentication userAuth = (UserAuthentication) authentication.getPrincipal();
+
         User user = userAuth.getUser();
 
         refreshTokenRepository.deleteByUser(user);
@@ -45,7 +53,9 @@ public class AuthService {
         RefreshToken refreshToken = RefreshToken.builder()
                 .token(UUID.randomUUID().toString())
                 .user(user)
-                .expiryDate(Instant.now().plusMillis(jwtProperties.refreshToken().expirationMs()))
+                .expiryDate(Instant.now().plusMillis(
+                        jwtProperties.refreshToken().expirationMs()
+                ))
                 .build();
 
         refreshTokenRepository.save(refreshToken);
@@ -55,25 +65,40 @@ public class AuthService {
 
     @Transactional
     public TokenResponse refresh(RefreshRequest request) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(request.refreshToken())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token inválido"));
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(
+                request.refreshToken()
+        ).orElseThrow(
+                () -> new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "Refresh token inválido"
+                )
+        );
 
         if (refreshToken.isExpired()) {
+
             refreshTokenRepository.delete(refreshToken);
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token expirado");
+
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, "Refresh token expirado"
+            );
         }
 
         User user = refreshToken.getUser();
         String newAccessToken = tokenService.generateAccessToken(user);
 
         refreshTokenRepository.delete(refreshToken);
+
         RefreshToken newRefreshToken = RefreshToken.builder()
                 .token(UUID.randomUUID().toString())
                 .user(user)
-                .expiryDate(Instant.now().plusMillis(jwtProperties.refreshToken().expirationMs()))
+                .expiryDate(Instant.now().plusMillis(
+                        jwtProperties.refreshToken().expirationMs()
+                ))
                 .build();
         refreshTokenRepository.save(newRefreshToken);
 
-        return new TokenResponse(newAccessToken, newRefreshToken.getToken());
+        return new TokenResponse(
+                newAccessToken,
+                newRefreshToken.getToken()
+        );
     }
 }

@@ -47,5 +47,12 @@ springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
-    enabled: true
-    path: /swagger-ui.html
+    enabled: false
+
+scalar:
+  enabled: true
+  url: /v3/api-docs
+  path: /scalar
+  pageTitle: Neon Vertex API
+  theme: default
+  darkMode: true
