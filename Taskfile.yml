@@ -1,0 +1,63 @@
+version: '3'
+
+vars:
+  COMPOSE: docker compose -f docker/dev/docker-compose.yml
+  APP_CONTAINER: neon-vertex-api
+
+tasks:
+  dev:
+    desc: "Sobe a api e acompanha os logs"
+    cmds:
+      - "{{.COMPOSE}} up --build -d"
+      - task: logs
+
+  dev:build:
+    desc: "Rebuilda a imagem e sobe"
+    cmds:
+      - "{{.COMPOSE}} up --build -d"
+
+  dev:down:
+    desc: "Para e remove os containers"
+    cmds:
+      - "{{.COMPOSE}} down"
+
+  dev:reset:
+    desc: "Para containers, remove volumes e sobe do zero"
+    cmds:
+      - "{{.COMPOSE}} down -v"
+      - "{{.COMPOSE}} up --build -d"
+
+  logs:
+    desc: "Acompanha os logs da api em tempo real"
+    cmds:
+      - "{{.COMPOSE}} logs -f api"
+
+  shell:
+    desc: "Abre um shell no container da api"
+    cmds:
+      - docker exec -it {{.APP_CONTAINER}} sh
+
+  ps:
+    desc: "Lista os containers do projeto"
+    cmds:
+      - "{{.COMPOSE}} ps"
+
+  restart:
+    desc: "Reinicia o container da api"
+    cmds:
+      - "{{.COMPOSE}} restart api"
+
+  test:
+    desc: "Roda os testes via Maven"
+    cmds:
+      - ./mvnw test
+
+  clean:
+    desc: "Limpa o build Maven"
+    cmds:
+      - ./mvnw clean
+
+  build:
+    desc: "Compila o projeto sem rodar os testes"
+    cmds:
+      - ./mvnw package -DskipTests

@@ -1,0 +1,16 @@
+services:
+  api:
+    build:
+      context: ../../
+      dockerfile: docker/dev/Dockerfile
+    container_name: neon-vertex-api
+    restart: unless-stopped
+    env_file:
+      - ../../.env
+    ports:
+      - "8080:8080"
+    volumes:
+      - api_logs:/app/logs
+
+volumes:
+  api_logs:
