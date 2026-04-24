@@ -1,5 +1,16 @@
 package br.api.neonvertex.modules.auth.application;
 
+import java.time.Instant;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
 import br.api.neonvertex.modules.auth.api.dto.LoginRequest;
 import br.api.neonvertex.modules.auth.api.dto.RefreshRequest;
 import br.api.neonvertex.modules.auth.api.dto.TokenResponse;
@@ -10,16 +21,6 @@ import br.api.neonvertex.modules.auth.infrastructure.TokenService;
 import br.api.neonvertex.modules.auth.infrastructure.UserAuthentication;
 import br.api.neonvertex.modules.users.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.time.Instant;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

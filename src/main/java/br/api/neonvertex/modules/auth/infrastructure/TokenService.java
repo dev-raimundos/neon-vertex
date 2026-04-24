@@ -1,13 +1,15 @@
 package br.api.neonvertex.modules.auth.infrastructure;
 
+import java.time.Instant;
+
+import org.springframework.stereotype.Service;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+
 import br.api.neonvertex.modules.users.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor

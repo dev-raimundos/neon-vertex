@@ -1,14 +1,15 @@
 package br.api.neonvertex.modules.auth.infrastructure;
 
-import br.api.neonvertex.modules.users.domain.User;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import br.api.neonvertex.modules.users.domain.User;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class UserAuthentication implements UserDetails {

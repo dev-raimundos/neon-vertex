@@ -7,7 +7,13 @@ public record JwtProperties(
         String secret,
         AccessToken accessToken,
         RefreshToken refreshToken
-) {
-    public record AccessToken(long expirationMs) {}
-    public record RefreshToken(long expirationMs) {}
+        ) {
+
+    public record AccessToken(long expirationMs) {
+
+    }
+
+    public record RefreshToken(long expirationMs) {
+
+    }
 }

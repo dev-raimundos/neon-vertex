@@ -1,12 +1,13 @@
 package br.api.neonvertex.modules.users.application;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import br.api.neonvertex.modules.users.api.dto.UserRegistrationRequest;
 import br.api.neonvertex.modules.users.domain.User;
 import br.api.neonvertex.modules.users.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
