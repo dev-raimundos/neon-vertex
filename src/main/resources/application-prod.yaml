@@ -1,0 +1,7 @@
+scalar:
+  enabled: false
+
+logging:
+  level:
+    org.hibernate.SQL: WARN
+    org.flywaydb.core: WARN
