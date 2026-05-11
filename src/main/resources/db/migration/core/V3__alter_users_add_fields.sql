@@ -1,0 +1,5 @@
+ALTER TABLE home.users
+    ADD COLUMN phone VARCHAR(20),
+    ADD COLUMN avatar_url VARCHAR(500),
+    ADD COLUMN last_login_at TIMESTAMP WITH TIME ZONE,
+    ADD COLUMN email_verified_at TIMESTAMP WITH TIME ZONE;
