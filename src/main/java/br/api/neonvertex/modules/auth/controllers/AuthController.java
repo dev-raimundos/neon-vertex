@@ -21,13 +21,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<AppResponse.Envelope<TokenResponse>> login(
+    public ResponseEntity<AppResponse.Body<TokenResponse>> login(
             @RequestBody @Valid LoginRequest request) {
         return AppResponse.ok(authService.login(request));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AppResponse.Envelope<TokenResponse>> refresh(
+    public ResponseEntity<AppResponse.Body<TokenResponse>> refresh(
             @RequestBody @Valid RefreshRequest request) {
         return AppResponse.ok(authService.refresh(request));
     }

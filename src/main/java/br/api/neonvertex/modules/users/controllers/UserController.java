@@ -20,7 +20,7 @@ public class UserController {
     private final UserService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AppResponse.Envelope<UserResponse>> register(
+    public ResponseEntity<AppResponse.Body<UserResponse>> register(
             @RequestBody @Valid UserRegistrationRequest request) {
         return AppResponse.created(
                 service.register(request),

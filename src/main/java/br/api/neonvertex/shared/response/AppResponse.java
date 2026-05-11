@@ -4,15 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-/**
- * Envelope padrão para respostas bem-sucedidas.
- * <p>
- * Uso:
- * return AppResponse.ok(data);
- * return AppResponse.created(data, "Criado com sucesso!");
- * return AppResponse.paginated(page);
- * return AppResponse.noContent();
- */
+import java.util.List;
+
 public class AppResponse {
 
     private AppResponse() {
@@ -21,30 +14,30 @@ public class AppResponse {
     // -------------------------------------------------------------------------
     // 200 OK
     // -------------------------------------------------------------------------
-    public static <T> ResponseEntity<Envelope<T>> ok(T data) {
-        return ResponseEntity.ok(Envelope.of(data, null));
+    public static <T> ResponseEntity<Body<T>> ok(T data) {
+        return ResponseEntity.ok(Body.of(data, null));
     }
 
-    public static <T> ResponseEntity<Envelope<T>> ok(T data, String message) {
-        return ResponseEntity.ok(Envelope.of(data, ToastPayload.success(message)));
+    public static <T> ResponseEntity<Body<T>> ok(T data, String message) {
+        return ResponseEntity.ok(Body.of(data, ToastPayload.success(message)));
     }
 
     // -------------------------------------------------------------------------
     // 201 Created
     // -------------------------------------------------------------------------
-    public static <T> ResponseEntity<Envelope<T>> created(T data) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(Envelope.of(data, null));
+    public static <T> ResponseEntity<Body<T>> created(T data) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(Body.of(data, null));
     }
 
-    public static <T> ResponseEntity<Envelope<T>> created(T data, String message) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(Envelope.of(data, ToastPayload.success(message)));
+    public static <T> ResponseEntity<Body<T>> created(T data, String message) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(Body.of(data, ToastPayload.success(message)));
     }
 
     // -------------------------------------------------------------------------
     // 202 Accepted
     // -------------------------------------------------------------------------
-    public static ResponseEntity<Envelope<Void>> accepted(String message) {
-        return ResponseEntity.accepted().body(Envelope.of(null, ToastPayload.info(message)));
+    public static ResponseEntity<Body<Void>> accepted(String message) {
+        return ResponseEntity.accepted().body(Body.of(null, ToastPayload.info(message)));
     }
 
     // -------------------------------------------------------------------------
@@ -55,29 +48,28 @@ public class AppResponse {
     }
 
     // -------------------------------------------------------------------------
-    // 206 Partial Content — paginação
+    // 206 Partial Content — pagination
     // -------------------------------------------------------------------------
-    public static <T> ResponseEntity<PageEnvelope<T>> paginated(Page<T> page) {
-        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(PageEnvelope.of(page, null));
+    public static <T> ResponseEntity<PageBody<T>> paginated(Page<T> page) {
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(PageBody.of(page, null));
     }
 
-    public static <T> ResponseEntity<PageEnvelope<T>> paginated(Page<T> page, String message) {
-        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(PageEnvelope.of(page, ToastPayload.info(message)));
+    public static <T> ResponseEntity<PageBody<T>> paginated(Page<T> page, String message) {
+        return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(PageBody.of(page, ToastPayload.info(message)));
     }
 
     // -------------------------------------------------------------------------
-    // Envelopes internos
+    // Internal records
     // -------------------------------------------------------------------------
-    public record Envelope<T>(T data, ToastPayload toast) {
-        static <T> Envelope<T> of(T data, ToastPayload toast) {
-            return new Envelope<>(data, toast);
+    public record Body<T>(T data, ToastPayload toast) {
+        static <T> Body<T> of(T data, ToastPayload toast) {
+            return new Body<>(data, toast);
         }
     }
 
-    public record PageEnvelope<T>(java.util.List<T> data, Pagination pagination, ToastPayload toast) {
-
-        static <T> PageEnvelope<T> of(Page<T> page, ToastPayload toast) {
-            return new PageEnvelope<>(
+    public record PageBody<T>(List<T> data, Pagination pagination, ToastPayload toast) {
+        static <T> PageBody<T> of(Page<T> page, ToastPayload toast) {
+            return new PageBody<>(
                     page.getContent(),
                     new Pagination(
                             page.getTotalElements(),
@@ -90,5 +82,6 @@ public class AppResponse {
         }
     }
 
-    public record Pagination(long total, int perPage, int currentPage, int lastPage) {}
+    public record Pagination(long total, int perPage, int currentPage, int lastPage) {
+    }
 }
