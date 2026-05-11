@@ -1,4 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS home;
 
 CREATE TABLE home.users (
     id UUID PRIMARY KEY,
