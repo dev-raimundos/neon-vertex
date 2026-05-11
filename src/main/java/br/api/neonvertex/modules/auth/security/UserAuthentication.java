@@ -7,7 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import br.api.neonvertex.modules.users.domain.User;
+import br.api.neonvertex.modules.users.models.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

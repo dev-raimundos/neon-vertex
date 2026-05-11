@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.api.neonvertex.modules.users.domain.UserRepository;
+import br.api.neonvertex.modules.users.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

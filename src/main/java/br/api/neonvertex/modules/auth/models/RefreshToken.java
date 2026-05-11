@@ -3,7 +3,7 @@ package br.api.neonvertex.modules.auth.models;
 import java.time.Instant;
 import java.util.UUID;
 
-import br.api.neonvertex.modules.users.domain.User;
+import br.api.neonvertex.modules.users.models.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
