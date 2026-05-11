@@ -11,6 +11,8 @@ import br.api.neonvertex.modules.users.models.User;
 import br.api.neonvertex.shared.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,26 +31,32 @@ public class AuthService {
 
     @Transactional
     public TokenResponse login(LoginRequest request) {
+
         var authToken = new UsernamePasswordAuthenticationToken(
                 request.email(),
                 request.password()
         );
 
-        // O AuthenticationManager já lança BadCredentialsException se as credenciais
-        // forem inválidas — o GlobalExceptionHandler captura via fallback genérico.
-        var authentication = authenticationManager.authenticate(authToken);
-        var userAuth = (UserAuthentication) authentication.getPrincipal();
-        var user = userAuth.getUser();
+        try {
+            var authentication = authenticationManager.authenticate(authToken);
+            var userAuth = (UserAuthentication) authentication.getPrincipal();
+            var user = userAuth.user();
 
-        refreshTokenRepository.deleteByUser(user);
+            refreshTokenRepository.deleteByUser(user);
 
-        var refreshToken = buildRefreshToken(user);
-        refreshTokenRepository.save(refreshToken);
+            var refreshToken = buildRefreshToken(user);
+            refreshTokenRepository.save(refreshToken);
 
-        return new TokenResponse(
-                tokenService.generateAccessToken(user),
-                refreshToken.getToken()
-        );
+            return new TokenResponse(
+                    tokenService.generateAccessToken(user),
+                    refreshToken.getToken()
+            );
+
+        } catch (DisabledException ex) {
+            throw AppException.unauthorized("Usuário Inativo");
+        } catch (BadCredentialsException ex) {
+            throw AppException.unauthorized("Usuário não encontrado ou senha incorreta.");
+        }
     }
 
     @Transactional
