@@ -19,6 +19,7 @@ public record UserRegistrationRequest(
 
         @NotBlank
         @Size(min = 8)
-        String password
-) {
-}
+        String password,
+
+        String phone
+) {}
