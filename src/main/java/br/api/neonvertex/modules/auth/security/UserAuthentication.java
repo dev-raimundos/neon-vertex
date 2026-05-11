@@ -1,4 +1,4 @@
-package br.api.neonvertex.modules.auth.infrastructure;
+package br.api.neonvertex.modules.auth.security;
 
 import java.util.Collection;
 import java.util.List;

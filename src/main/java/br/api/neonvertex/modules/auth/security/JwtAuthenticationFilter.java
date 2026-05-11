@@ -1,5 +1,6 @@
-package br.api.neonvertex.modules.auth.infrastructure;
+package br.api.neonvertex.modules.auth.security;
 
+import br.api.neonvertex.modules.auth.services.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package br.api.neonvertex.modules.auth.infrastructure;
+package br.api.neonvertex.modules.auth.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

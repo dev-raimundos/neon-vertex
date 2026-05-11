@@ -1,7 +1,8 @@
-package br.api.neonvertex.modules.auth.infrastructure;
+package br.api.neonvertex.modules.auth.services;
 
 import java.time.Instant;
 
+import br.api.neonvertex.modules.auth.config.JwtProperties;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;

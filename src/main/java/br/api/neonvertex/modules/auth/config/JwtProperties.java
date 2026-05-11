@@ -1,4 +1,4 @@
-package br.api.neonvertex.modules.auth.infrastructure;
+package br.api.neonvertex.modules.auth.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

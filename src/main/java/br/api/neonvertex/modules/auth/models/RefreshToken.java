@@ -1,4 +1,4 @@
-package br.api.neonvertex.modules.auth.domain;
+package br.api.neonvertex.modules.auth.models;
 
 import java.time.Instant;
 import java.util.UUID;
