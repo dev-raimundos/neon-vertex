@@ -7,7 +7,7 @@ import br.api.neonvertex.modules.auth.models.RefreshToken;
 import br.api.neonvertex.modules.auth.repositories.RefreshTokenRepository;
 import br.api.neonvertex.modules.auth.config.JwtProperties;
 import br.api.neonvertex.modules.auth.security.UserAuthentication;
-import br.api.neonvertex.modules.users.domain.User;
+import br.api.neonvertex.modules.users.models.User;
 import br.api.neonvertex.shared.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

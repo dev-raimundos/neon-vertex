@@ -1,4 +1,4 @@
-package br.api.neonvertex.modules.auth.controller;
+package br.api.neonvertex.modules.auth.controllers;
 
 import br.api.neonvertex.modules.auth.dto.LoginRequest;
 import br.api.neonvertex.modules.auth.dto.RefreshRequest;
