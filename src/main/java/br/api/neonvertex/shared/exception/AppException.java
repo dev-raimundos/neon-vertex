@@ -1,13 +1,18 @@
 package br.api.neonvertex.shared.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 
 import java.util.List;
 import java.util.Map;
 
+@Getter
 public class AppException extends RuntimeException {
 
+    // -------------------------------------------------------------------------
+    // Accessor
+    // -------------------------------------------------------------------------
     private final ProblemDetail problem;
 
     // -------------------------------------------------------------------------
@@ -108,13 +113,6 @@ public class AppException extends RuntimeException {
 
     public static AppException serviceUnavailable() {
         return serviceUnavailable("Serviço indisponível.");
-    }
-
-    // -------------------------------------------------------------------------
-    // Accessor
-    // -------------------------------------------------------------------------
-    public ProblemDetail getProblem() {
-        return problem;
     }
 
     // -------------------------------------------------------------------------
