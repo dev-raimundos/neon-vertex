@@ -5,7 +5,9 @@ import br.api.neonvertex.modules.auth.dto.RefreshRequest;
 import br.api.neonvertex.modules.auth.dto.TokenResponse;
 import br.api.neonvertex.modules.auth.services.AuthService;
 import br.api.neonvertex.shared.response.AppResponse;
+
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,14 +23,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<AppResponse.Body<TokenResponse>> login(
-            @RequestBody @Valid LoginRequest request) {
+    public ResponseEntity<AppResponse.Body<TokenResponse>> login(@RequestBody @Valid LoginRequest request) {
         return AppResponse.ok(authService.login(request));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AppResponse.Body<TokenResponse>> refresh(
-            @RequestBody @Valid RefreshRequest request) {
+    public ResponseEntity<AppResponse.Body<TokenResponse>> refresh(@RequestBody @Valid RefreshRequest request) {
         return AppResponse.ok(authService.refresh(request));
     }
 }

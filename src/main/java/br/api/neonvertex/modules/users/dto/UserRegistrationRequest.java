@@ -6,20 +6,21 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record UserRegistrationRequest(
-        @NotBlank
-        String name,
+    @NotBlank
+    String name,
 
-        @NotBlank
-        @Email
-        String email,
+    @NotBlank
+    @Email
+    String email,
 
-        @NotBlank
-        @Pattern(regexp = "\\d{11}", message = "CPF deve conter exatamente 11 dígitos numéricos")
-        String cpf,
+    @NotBlank
+    @Pattern(regexp = "\\d{11}", message = "CPF deve conter exatamente 11 dígitos numéricos")
+    String cpf,
 
-        @NotBlank
-        @Size(min = 8)
-        String password,
+    @NotBlank
+    @Size(min = 8)
+    String password,
 
-        String phone
-) {}
+    String phone
+) {
+}

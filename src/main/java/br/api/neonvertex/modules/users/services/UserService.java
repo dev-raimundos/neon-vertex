@@ -7,6 +7,7 @@ import br.api.neonvertex.modules.users.models.User;
 import br.api.neonvertex.modules.users.enums.UserStatus;
 import br.api.neonvertex.modules.users.repositories.UserRepository;
 import br.api.neonvertex.shared.exception.AppException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,16 +31,11 @@ public class UserService {
         }
 
         var defaultRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> AppException.internalError("Role padrão não encontrada."));
+            .orElseThrow(() -> AppException.internalError("Role padrão não encontrada."));
 
-        var user = User.builder()
-                .name(request.name())
-                .email(request.email())
-                .cpf(request.cpf())
-                .password(passwordEncoder.encode(request.password()))
-                .phone(request.phone())
-                .status(UserStatus.ACTIVE)
-                .build();
+        var user = User.builder().name(request.name()).email(request.email()).cpf(request.cpf())
+            .password(passwordEncoder.encode(request.password())).phone(request.phone()).status(UserStatus.ACTIVE)
+            .build();
 
         user.addRole(defaultRole);
 

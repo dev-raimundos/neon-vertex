@@ -1,6 +1,7 @@
 package br.api.neonvertex.shared.exception;
 
 import jakarta.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -43,12 +44,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BadCredentialsException.class)
     public ProblemDetail handleBadCredentials(BadCredentialsException ex) {
-        return problem(
-                HttpStatus.UNAUTHORIZED,
-                "Credenciais inválidas.",
-                "warning",
-                "E-mail ou senha incorretos."
-        );
+        return problem(HttpStatus.UNAUTHORIZED, "Credenciais inválidas.", "warning", "E-mail ou senha incorretos.");
     }
 
     /**
@@ -56,12 +52,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AccessDeniedException.class)
     public ProblemDetail handleAccessDenied(AccessDeniedException ex) {
-        return problem(
-                HttpStatus.FORBIDDEN,
-                "Acesso negado.",
-                "warning",
-                "Você não tem permissão para acessar este recurso."
-        );
+        return problem(HttpStatus.FORBIDDEN,
+            "Acesso negado.",
+            "warning",
+            "Você não tem permissão para acessar este recurso.");
     }
 
     /**
@@ -69,12 +63,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(DisabledException.class)
     public ProblemDetail handleDisabled(DisabledException ex) {
-        return problem(
-                HttpStatus.UNAUTHORIZED,
-                "Conta desativada.",
-                "warning",
-                "Sua conta está desativada."
-        );
+        return problem(HttpStatus.UNAUTHORIZED, "Conta desativada.", "warning", "Sua conta está desativada.");
     }
 
     /**
@@ -82,12 +71,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(LockedException.class)
     public ProblemDetail handleLocked(LockedException ex) {
-        return problem(
-                HttpStatus.UNAUTHORIZED,
-                "Conta bloqueada.",
-                "warning",
-                "Sua conta está bloqueada."
-        );
+        return problem(HttpStatus.UNAUTHORIZED, "Conta bloqueada.", "warning", "Sua conta está bloqueada.");
     }
 
     /**
@@ -95,12 +79,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(AuthenticationException.class)
     public ProblemDetail handleAuthentication(AuthenticationException ex) {
-        return problem(
-                HttpStatus.UNAUTHORIZED,
-                "Não autenticado.",
-                "warning",
-                "Autenticação necessária."
-        );
+        return problem(HttpStatus.UNAUTHORIZED, "Não autenticado.", "warning", "Autenticação necessária.");
     }
 
     // -------------------------------------------------------------------------
@@ -112,11 +91,8 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidation(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .toList();
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+            .map(error -> error.getField() + ": " + error.getDefaultMessage()).toList();
 
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, "Dados inválidos.");
         problem.setProperty("errors", errors);
@@ -129,15 +105,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public ProblemDetail handleConstraintViolation(ConstraintViolationException ex) {
-        List<String> errors = ex.getConstraintViolations()
-                .stream()
-                .map(v -> v.getPropertyPath() + ": " + v.getMessage())
-                .toList();
+        List<String> errors = ex.getConstraintViolations().stream()
+            .map(v -> v.getPropertyPath() + ": " + v.getMessage()).toList();
 
-        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
-                HttpStatus.UNPROCESSABLE_ENTITY,
-                "Dados inválidos."
-        );
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, "Dados inválidos.");
         problem.setProperty("errors", errors);
         problem.setProperty("toast", Map.of("type", "warning", "message", "Verifique os dados informados."));
         return problem;
@@ -148,12 +119,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail handleNotReadable(HttpMessageNotReadableException ex) {
-        return problem(
-                HttpStatus.BAD_REQUEST,
-                "Requisição inválida.",
-                "warning",
-                "O corpo da requisição está malformado."
-        );
+        return problem(HttpStatus.BAD_REQUEST,
+            "Requisição inválida.",
+            "warning",
+            "O corpo da requisição está malformado.");
     }
 
     /**
@@ -161,12 +130,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ProblemDetail handleMissingParam(MissingServletRequestParameterException ex) {
-        return problem(
-                HttpStatus.BAD_REQUEST,
-                "Parâmetro ausente: " + ex.getParameterName(),
-                "warning",
-                "Parâmetro obrigatório não informado."
-        );
+        return problem(HttpStatus.BAD_REQUEST,
+            "Parâmetro ausente: " + ex.getParameterName(),
+            "warning",
+            "Parâmetro obrigatório não informado.");
     }
 
     /**
@@ -174,12 +141,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ProblemDetail handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        return problem(
-                HttpStatus.BAD_REQUEST,
-                "Parâmetro inválido: " + ex.getName(),
-                "warning",
-                "Valor inválido para o parâmetro informado."
-        );
+        return problem(HttpStatus.BAD_REQUEST,
+            "Parâmetro inválido: " + ex.getName(),
+            "warning",
+            "Valor inválido para o parâmetro informado.");
     }
 
     /**
@@ -187,12 +152,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ProblemDetail handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex) {
-        return problem(
-                HttpStatus.METHOD_NOT_ALLOWED,
-                "Método não permitido.",
-                "warning",
-                "Método HTTP não suportado para este endpoint."
-        );
+        return problem(HttpStatus.METHOD_NOT_ALLOWED,
+            "Método não permitido.",
+            "warning",
+            "Método HTTP não suportado para este endpoint.");
     }
 
     /**
@@ -200,12 +163,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ProblemDetail handleMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex) {
-        return problem(
-                HttpStatus.UNSUPPORTED_MEDIA_TYPE,
-                "Tipo de mídia não suportado.",
-                "warning",
-                "Use application/json."
-        );
+        return problem(HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+            "Tipo de mídia não suportado.",
+            "warning",
+            "Use application/json.");
     }
 
     /**
@@ -213,12 +174,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NoResourceFoundException.class)
     public ProblemDetail handleNoResourceFound(NoResourceFoundException ex) {
-        return problem(
-                HttpStatus.NOT_FOUND,
-                "Rota não encontrada.",
-                "warning",
-                "O endpoint solicitado não existe."
-        );
+        return problem(HttpStatus.NOT_FOUND, "Rota não encontrada.", "warning", "O endpoint solicitado não existe.");
     }
 
     // -------------------------------------------------------------------------
@@ -231,12 +187,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleGeneric(Exception ex) {
-        return problem(
-                HttpStatus.INTERNAL_SERVER_ERROR,
-                "Erro interno do servidor.",
-                "error",
-                "Erro interno do servidor."
-        );
+        return problem(HttpStatus.INTERNAL_SERVER_ERROR,
+            "Erro interno do servidor.",
+            "error",
+            "Erro interno do servidor.");
     }
 
     // -------------------------------------------------------------------------
@@ -245,15 +199,7 @@ public class GlobalExceptionHandler {
 
     private ProblemDetail problem(HttpStatus status, String detail, String toastType, String toastMessage) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, detail);
-        problem.setProperty(
-                "toast",
-                Map.of(
-                        "type",
-                        toastType,
-                        "message",
-                        toastMessage
-                )
-        );
+        problem.setProperty("toast", Map.of("type", toastType, "message", toastMessage));
         return problem;
     }
 }

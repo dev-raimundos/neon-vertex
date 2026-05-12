@@ -9,6 +9,7 @@ import br.api.neonvertex.modules.auth.config.JwtProperties;
 import br.api.neonvertex.modules.auth.security.UserAuthentication;
 import br.api.neonvertex.modules.users.models.User;
 import br.api.neonvertex.shared.exception.AppException;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,10 +33,7 @@ public class AuthService {
     @Transactional
     public TokenResponse login(LoginRequest request) {
 
-        var authToken = new UsernamePasswordAuthenticationToken(
-                request.email(),
-                request.password()
-        );
+        var authToken = new UsernamePasswordAuthenticationToken(request.email(), request.password());
 
         try {
             var authentication = authenticationManager.authenticate(authToken);
@@ -47,13 +45,10 @@ public class AuthService {
             var refreshToken = buildRefreshToken(user);
             refreshTokenRepository.save(refreshToken);
 
-            return new TokenResponse(
-                    tokenService.generateAccessToken(user),
-                    refreshToken.getToken()
-            );
+            return new TokenResponse(tokenService.generateAccessToken(user), refreshToken.getToken());
 
         } catch (DisabledException ex) {
-            throw AppException.unauthorized("Usuário Inativo");
+            throw AppException.unauthorized("Usuário Inativo.");
         } catch (BadCredentialsException ex) {
             throw AppException.unauthorized("Usuário não encontrado ou senha incorreta.");
         }
@@ -61,12 +56,9 @@ public class AuthService {
 
     @Transactional
     public TokenResponse refresh(RefreshRequest request) {
-        var refreshToken = refreshTokenRepository
-                .findByToken(request.refreshToken())
-                .orElseThrow(() -> AppException.unauthorized("Refresh token inválido."));
+        var refreshToken = refreshTokenRepository.findByToken(request.refreshToken())
+            .orElseThrow(() -> AppException.unauthorized("Refresh token inválido."));
 
-        // Deleta sempre — expirado ou não — antes de qualquer validação,
-        // garantindo que tokens usados nunca permaneçam no banco.
         refreshTokenRepository.delete(refreshToken);
 
         if (refreshToken.isExpired()) {
@@ -77,10 +69,7 @@ public class AuthService {
         var newRefreshToken = buildRefreshToken(user);
         refreshTokenRepository.save(newRefreshToken);
 
-        return new TokenResponse(
-                tokenService.generateAccessToken(user),
-                newRefreshToken.getToken()
-        );
+        return new TokenResponse(tokenService.generateAccessToken(user), newRefreshToken.getToken());
     }
 
     // -------------------------------------------------------------------------
@@ -88,12 +77,7 @@ public class AuthService {
     // -------------------------------------------------------------------------
 
     private RefreshToken buildRefreshToken(User user) {
-        return RefreshToken.builder()
-                .token(UUID.randomUUID().toString())
-                .user(user)
-                .expiryDate(Instant.now().plusMillis(
-                        jwtProperties.refreshToken().expirationMs()
-                ))
-                .build();
+        return RefreshToken.builder().token(UUID.randomUUID().toString()).user(user)
+            .expiryDate(Instant.now().plusMillis(jwtProperties.refreshToken().expirationMs())).build();
     }
 }

@@ -25,10 +25,7 @@ public class AppException extends RuntimeException {
     private AppException(HttpStatus status, String message, List<String> errors) {
         super(message);
         this.problem = ProblemDetail.forStatusAndDetail(status, message);
-        this.problem.setProperty("toast", Map.of(
-                "type", resolveToastType(status),
-                "message", message
-        ));
+        this.problem.setProperty("toast", Map.of("type", resolveToastType(status), "message", message));
         if (!errors.isEmpty()) {
             this.problem.setProperty("errors", errors);
         }

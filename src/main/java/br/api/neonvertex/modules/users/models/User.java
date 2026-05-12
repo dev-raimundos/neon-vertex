@@ -2,8 +2,11 @@ package br.api.neonvertex.modules.users.models;
 
 import br.api.neonvertex.core.iam.models.Role;
 import br.api.neonvertex.modules.users.enums.UserStatus;
+
 import jakarta.persistence.*;
+
 import lombok.*;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -53,12 +56,8 @@ public class User {
     private UserStatus status;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            schema = "home",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+    @JoinTable(name = "user_roles", schema = "home", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns
+        = @JoinColumn(name = "role_id"))
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
 

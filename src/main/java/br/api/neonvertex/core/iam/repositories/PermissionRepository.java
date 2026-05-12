@@ -1,6 +1,7 @@
 package br.api.neonvertex.core.iam.repositories;
 
 import br.api.neonvertex.core.iam.models.Permission;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -44,7 +44,8 @@ public class AppResponse {
     // 204 No Content
     // -------------------------------------------------------------------------
     public static ResponseEntity<Void> noContent() {
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent()
+            .build();
     }
 
     // -------------------------------------------------------------------------
@@ -69,16 +70,9 @@ public class AppResponse {
 
     public record PageBody<T>(List<T> data, Pagination pagination, ToastPayload toast) {
         static <T> PageBody<T> of(Page<T> page, ToastPayload toast) {
-            return new PageBody<>(
-                    page.getContent(),
-                    new Pagination(
-                            page.getTotalElements(),
-                            page.getSize(),
-                            page.getNumber() + 1,
-                            page.getTotalPages()
-                    ),
-                    toast
-            );
+            return new PageBody<>(page.getContent(),
+                new Pagination(page.getTotalElements(), page.getSize(), page.getNumber() + 1, page.getTotalPages()),
+                toast);
         }
     }
 

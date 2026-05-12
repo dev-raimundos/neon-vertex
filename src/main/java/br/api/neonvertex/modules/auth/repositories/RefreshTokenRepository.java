@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import br.api.neonvertex.modules.auth.models.RefreshToken;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.api.neonvertex.modules.users.models.User;

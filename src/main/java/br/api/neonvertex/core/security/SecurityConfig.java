@@ -1,6 +1,7 @@
 package br.api.neonvertex.core.security;
 
 import br.api.neonvertex.modules.auth.security.JwtAuthenticationFilter;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,20 +24,11 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private static final String[] PUBLIC_ROUTES = {
-            "/api/auth/login",
-            "/api/auth/refresh",
-            "/api/users/register",
-            "/actuator/health"
-    };
+    private static final String[] PUBLIC_ROUTES = {"/api/auth/login", "/api/auth/refresh", "/api/users/register",
+        "/actuator/health"};
 
-    private static final String[] DOCS_ROUTES = {
-            "/v3/api-docs/**",
-            "/v3/api-docs.yaml",
-            "/webjars/**",
-            "/scalar",
-            "/scalar/**"
-    };
+    private static final String[] DOCS_ROUTES = {"/v3/api-docs/**", "/v3/api-docs.yaml", "/webjars/**", "/scalar",
+        "/scalar/**"};
 
     // -------------------------------------------------------------------------
     // Produção — docs bloqueados
@@ -73,21 +65,16 @@ public class SecurityConfig {
     // Internal
     // -------------------------------------------------------------------------
     private SecurityFilterChain buildChain(HttpSecurity http, String[] extraPublicRoutes) throws Exception {
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(PUBLIC_ROUTES).permitAll();
-                    if (extraPublicRoutes.length > 0) {
-                        auth.requestMatchers(extraPublicRoutes).permitAll();
-                    }
-                    auth.anyRequest().authenticated();
-                })
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+        return http.csrf(AbstractHttpConfigurer::disable).formLogin(AbstractHttpConfigurer::disable)
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> {
+                auth.requestMatchers(PUBLIC_ROUTES).permitAll();
+                if (extraPublicRoutes.length > 0) {
+                    auth.requestMatchers(extraPublicRoutes).permitAll();
+                }
+                auth.anyRequest().authenticated();
+            }).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
     }
 }
