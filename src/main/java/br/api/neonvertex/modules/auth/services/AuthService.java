@@ -8,6 +8,7 @@ import br.api.neonvertex.modules.auth.repositories.RefreshTokenRepository;
 import br.api.neonvertex.modules.auth.config.JwtProperties;
 import br.api.neonvertex.modules.auth.security.UserAuthentication;
 import br.api.neonvertex.modules.users.models.User;
+import br.api.neonvertex.modules.users.repositories.UserRepository;
 import br.api.neonvertex.shared.exception.AppException;
 
 import lombok.RequiredArgsConstructor;
@@ -33,23 +34,33 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
     private final JwtProperties jwtProperties;
 
     @Transactional
     public TokenResponse login(LoginRequest request) {
-        var authToken = new UsernamePasswordAuthenticationToken(request.email(), request.password());
+        var authToken = new UsernamePasswordAuthenticationToken(
+            request.email(),
+            request.password()
+        );
 
         try {
             var authentication = authenticationManager.authenticate(authToken);
             var userAuth = (UserAuthentication) authentication.getPrincipal();
             var user = userAuth.user();
 
+            user.recordLogin();
+            userRepository.save(user);
+
             refreshTokenRepository.deleteByUser(user);
 
             var refreshToken = buildRefreshToken(user);
             refreshTokenRepository.save(refreshToken);
 
-            return new TokenResponse(tokenService.generateAccessToken(user), refreshToken.getToken());
+            return new TokenResponse(
+                tokenService.generateAccessToken(user),
+                refreshToken.getToken()
+            );
 
         } catch (DisabledException ex) {
             throw AppException.unauthorized(ERR_USER_INACTIVE);
@@ -73,7 +84,10 @@ public class AuthService {
         var newRefreshToken = buildRefreshToken(user);
         refreshTokenRepository.save(newRefreshToken);
 
-        return new TokenResponse(tokenService.generateAccessToken(user), newRefreshToken.getToken());
+        return new TokenResponse(
+            tokenService.generateAccessToken(user),
+            newRefreshToken.getToken()
+        );
     }
 
     // -------------------------------------------------------------------------
