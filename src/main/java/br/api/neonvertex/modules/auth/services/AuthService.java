@@ -25,6 +25,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthService {
 
+    private static final String ERR_USER_INACTIVE = "Usuário inativo.";
+    private static final String ERR_INVALID_CREDENTIALS = "Usuário não encontrado ou senha incorreta.";
+    private static final String ERR_INVALID_REFRESH_TOKEN = "Refresh token inválido.";
+    private static final String ERR_EXPIRED_REFRESH_TOKEN = "Refresh token expirado.";
+
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -32,7 +37,6 @@ public class AuthService {
 
     @Transactional
     public TokenResponse login(LoginRequest request) {
-
         var authToken = new UsernamePasswordAuthenticationToken(request.email(), request.password());
 
         try {
@@ -48,21 +52,21 @@ public class AuthService {
             return new TokenResponse(tokenService.generateAccessToken(user), refreshToken.getToken());
 
         } catch (DisabledException ex) {
-            throw AppException.unauthorized("Usuário Inativo.");
+            throw AppException.unauthorized(ERR_USER_INACTIVE);
         } catch (BadCredentialsException ex) {
-            throw AppException.unauthorized("Usuário não encontrado ou senha incorreta.");
+            throw AppException.unauthorized(ERR_INVALID_CREDENTIALS);
         }
     }
 
     @Transactional
     public TokenResponse refresh(RefreshRequest request) {
         var refreshToken = refreshTokenRepository.findByToken(request.refreshToken())
-            .orElseThrow(() -> AppException.unauthorized("Refresh token inválido."));
+            .orElseThrow(() -> AppException.unauthorized(ERR_INVALID_REFRESH_TOKEN));
 
         refreshTokenRepository.delete(refreshToken);
 
         if (refreshToken.isExpired()) {
-            throw AppException.unauthorized("Refresh token expirado.");
+            throw AppException.unauthorized(ERR_EXPIRED_REFRESH_TOKEN);
         }
 
         var user = refreshToken.getUser();
@@ -77,7 +81,10 @@ public class AuthService {
     // -------------------------------------------------------------------------
 
     private RefreshToken buildRefreshToken(User user) {
-        return RefreshToken.builder().token(UUID.randomUUID().toString()).user(user)
-            .expiryDate(Instant.now().plusMillis(jwtProperties.refreshToken().expirationMs())).build();
+        return RefreshToken.builder()
+            .token(UUID.randomUUID().toString())
+            .user(user)
+            .expiryDate(Instant.now().plusMillis(jwtProperties.refreshToken().expirationMs()))
+            .build();
     }
 }

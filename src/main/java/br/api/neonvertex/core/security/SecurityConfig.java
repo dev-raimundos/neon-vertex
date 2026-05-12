@@ -67,7 +67,11 @@ public class SecurityConfig {
     private SecurityFilterChain buildChain(HttpSecurity http, String[] extraPublicRoutes) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable).formLogin(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(
+                session -> session.sessionCreationPolicy(
+                    SessionCreationPolicy.STATELESS
+                )
+            )
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers(PUBLIC_ROUTES).permitAll();
                 if (extraPublicRoutes.length > 0) {
