@@ -79,11 +79,11 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         var config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
-            "http://localhost:4200"   // Angular dev
+            "http://localhost:4200"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true); // obrigatório para cookies
+        config.setAllowCredentials(true);
         config.setMaxAge(3600L);
 
         var source = new UrlBasedCorsConfigurationSource();
@@ -104,10 +104,13 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> {
+
                 auth.requestMatchers(PUBLIC_ROUTES).permitAll();
+
                 if (extraPublicRoutes.length > 0) {
                     auth.requestMatchers(extraPublicRoutes).permitAll();
                 }
+
                 auth.anyRequest().authenticated();
             })
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

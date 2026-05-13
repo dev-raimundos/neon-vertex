@@ -43,7 +43,11 @@ public class AuthService {
 
     @Transactional
     public void login(LoginRequest request, HttpServletResponse response) {
-        var authToken = new UsernamePasswordAuthenticationToken(request.email(), request.password());
+
+        var authToken = new UsernamePasswordAuthenticationToken(
+            request.email(),
+            request.password()
+        );
 
         try {
             var authentication = authenticationManager.authenticate(authToken);
@@ -70,7 +74,7 @@ public class AuthService {
 
     @Transactional
     public void refresh(HttpServletRequest request, HttpServletResponse response) {
-        var refreshTokenValue = extractCookie(request, COOKIE_REFRESH_TOKEN);
+        var refreshTokenValue = extractCookie(request);
 
         var refreshToken = refreshTokenRepository.findByToken(refreshTokenValue)
             .orElseThrow(() -> AppException.unauthorized(ERR_INVALID_REFRESH_TOKEN));
@@ -106,8 +110,8 @@ public class AuthService {
             .build();
     }
 
-    private String extractCookie(HttpServletRequest request, String name) {
-        var cookie = WebUtils.getCookie(request, name);
+    private String extractCookie(HttpServletRequest request) {
+        var cookie = WebUtils.getCookie(request, AuthService.COOKIE_REFRESH_TOKEN);
         if (cookie == null) {
             throw AppException.unauthorized(ERR_INVALID_REFRESH_TOKEN);
         }

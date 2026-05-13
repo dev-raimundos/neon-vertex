@@ -29,6 +29,7 @@ public class UserService {
 
     @Transactional
     public UserResponse register(UserRegistrationRequest request) {
+
         if (userRepository.existsByEmail(request.email())) {
             throw AppException.conflict(EMAIL_ALREADY_EXISTS);
         }
